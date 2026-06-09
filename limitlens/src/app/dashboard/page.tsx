@@ -1,6 +1,40 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  AlertTriangle,
+  CheckCircle,
+  TrendingUp,
+  RefreshCw,
+  Clock,
+  Cpu,
+  Database,
+  Globe,
+  Zap,
+  HardDrive,
+  GitBranch,
+  BookOpen,
+  PenTool,
+} from "lucide-react";
+import { Sidebar } from "@/components/Sidebar";
+
+const STATUS_META = {
+  safe:     { label: "Safe",     color: "var(--status-safe)",     bg: "var(--status-safe-bg)" },
+  watch:    { label: "Watch",    color: "var(--status-watch)",    bg: "var(--status-watch-bg)" },
+  warning:  { label: "Warning",  color: "var(--status-warning)",  bg: "var(--status-warning-bg)" },
+  danger:   { label: "Danger",   color: "var(--status-danger)",   bg: "var(--status-danger-bg)" },
+  critical: { label: "Critical", color: "var(--status-critical)", bg: "var(--status-critical-bg)" },
+} as const;
+
+type Status = keyof typeof STATUS_META;
+
+function getStatus(pct: number): Status {
+  if (pct >= 95) return "critical";
+  if (pct >= 85) return "danger";
+  if (pct >= 75) return "warning";
+  if (pct >= 50) return "watch";
+  return "safe";
+}
 
 interface UsageMetric {
   id: string;
@@ -13,46 +47,224 @@ interface UsageMetric {
   checkedAt: string;
 }
 
-function getStatusColor(pct: number) {
-  if (pct >= 95) return { bg: "bg-red-500/20", text: "text-red-400", bar: "bg-red-500", label: "CRITICAL" };
-  if (pct >= 85) return { bg: "bg-orange-500/20", text: "text-orange-400", bar: "bg-orange-500", label: "DANGER" };
-  if (pct >= 75) return { bg: "bg-amber-500/20", text: "text-amber-400", bar: "bg-amber-500", label: "WARNING" };
-  if (pct >= 50) return { bg: "bg-yellow-500/20", text: "text-yellow-400", bar: "bg-yellow-500", label: "WATCH" };
-  return { bg: "bg-emerald-500/20", text: "text-emerald-400", bar: "bg-emerald-500", label: "SAFE" };
+const METRIC_ICONS: Record<string, React.ElementType> = {
+  active_cpu_hours: Cpu,
+  provisioned_memory: Database,
+  edge_requests: Globe,
+  function_invocations: Zap,
+  fast_data_transfer: HardDrive,
+  build_execution_minutes: GitBranch,
+  isr_reads: BookOpen,
+  isr_writes: PenTool,
+  project_count: BookOpen,
+};
+
+const METRIC_DESCRIPTIONS: Record<string, string> = {
+  active_cpu_hours: "Serverless function compute time",
+  provisioned_memory: "Memory allocated to functions",
+  edge_requests: "Total edge network requests",
+  function_invocations: "Serverless function calls",
+  fast_data_transfer: "Outbound bandwidth usage",
+  build_execution_minutes: "Total build minutes consumed",
+  isr_reads: "Incremental static regen cache reads",
+  isr_writes: "Incremental static regen cache writes",
+  project_count: "Total Vercel projects",
+};
+
+function StatusBadge({ status }: { status: Status }) {
+  const meta = STATUS_META[status];
+  return (
+    <span
+      className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+      style={{ background: meta.bg, color: meta.color }}
+    >
+      {meta.label}
+    </span>
+  );
 }
 
-function formatValue(value: number, unit: string) {
-  if (["invocations", "requests", "reads", "writes"].includes(unit)) {
-    return value.toLocaleString();
-  }
-  return value.toFixed(1);
+function ProgressBar({ pct, status }: { pct: number; status: Status }) {
+  const color = STATUS_META[status].color;
+  return (
+    <div
+      className="h-1.5 rounded-full overflow-hidden"
+      style={{ background: "var(--muted)" }}
+    >
+      <div
+        className="h-full rounded-full transition-all duration-500"
+        style={{ width: `${Math.min(pct, 100)}%`, background: color }}
+      />
+    </div>
+  );
 }
 
-function ResourceCard({ metric }: { metric: UsageMetric }) {
-  const status = getStatusColor(metric.percentageUsed);
-  const displayName = metric.metricKey.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+function UsageCard({ metric }: { metric: UsageMetric }) {
+  const status = getStatus(metric.percentageUsed);
+  const meta = STATUS_META[status];
+  const Icon = METRIC_ICONS[metric.metricKey] || Cpu;
+  const description =
+    METRIC_DESCRIPTIONS[metric.metricKey] ||
+    metric.metricKey.replace(/_/g, " ");
+  const displayName =
+    metric.metricKey.replace(/_/g, " ").replace(/\b\w/g, (l) =>
+      l.toUpperCase()
+    );
+
+  const formatValue = (v: number, unit: string) => {
+    if (v >= 1000000) return `${(v / 1000000).toFixed(1)}M`;
+    if (v >= 1000) return `${(v / 1000).toFixed(1)}k`;
+    return `${v}`;
+  };
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-medium text-gray-300">{displayName}</h3>
-        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${status.bg} ${status.text}`}>
-          {status.label}
+    <div
+      className="p-5 rounded-xl border transition-all hover:border-opacity-60 group"
+      style={{ background: "var(--card)", border: "1px solid var(--border)" }}
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{ background: meta.bg }}
+          >
+            <Icon className="w-4 h-4" style={{ color: meta.color }} />
+          </div>
+          <div>
+            <div className="text-sm font-medium leading-tight">
+              {displayName}
+            </div>
+            <div
+              className="text-xs mt-0.5"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              {description}
+            </div>
+          </div>
+        </div>
+        <StatusBadge status={status} />
+      </div>
+
+      <div className="flex items-end justify-between mb-2">
+        <div>
+          <span
+            className="text-xl font-semibold"
+            style={{
+              fontFamily: "var(--font-family-mono)",
+              color: meta.color,
+            }}
+          >
+            {formatValue(metric.usedValue, metric.unit)}
+          </span>
+          <span
+            className="text-sm ml-1"
+            style={{
+              color: "var(--muted-foreground)",
+              fontFamily: "var(--font-family-mono)",
+            }}
+          >
+            / {formatValue(metric.limitValue, metric.unit)} {metric.unit}
+          </span>
+        </div>
+        <span
+          className="text-sm font-semibold"
+          style={{ color: meta.color, fontFamily: "var(--font-family-mono)" }}
+        >
+          {metric.percentageUsed.toFixed(0)}%
         </span>
       </div>
-      <div className="mb-3">
-        <span className="text-2xl font-bold text-white">{formatValue(metric.usedValue, metric.unit)}</span>
-        <span className="text-gray-500 text-sm"> / {formatValue(metric.limitValue, metric.unit)} {metric.unit}</span>
+
+      <ProgressBar pct={metric.percentageUsed} status={status} />
+
+      <div className="flex items-center justify-between mt-2">
+        <span
+          className="text-xs"
+          style={{ color: "var(--muted-foreground)" }}
+        >
+          {formatValue(metric.remainingValue, metric.unit)} {metric.unit}{" "}
+          remaining
+        </span>
+        {metric.percentageUsed >= 75 && (
+          <span className="text-xs" style={{ color: meta.color }}>
+            ⚑ threshold crossed
+          </span>
+        )}
       </div>
-      <div className="w-full bg-gray-800 rounded-full h-2 mb-2">
+    </div>
+  );
+}
+
+function HealthRing({ score, status }: { score: number; status: Status }) {
+  const meta = STATUS_META[status];
+  const r = 40;
+  const circ = 2 * Math.PI * r;
+  const offset = circ - (score / 100) * circ;
+
+  return (
+    <div className="flex items-center gap-6">
+      <div className="relative w-24 h-24 flex-shrink-0">
+        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+          <circle
+            cx="50"
+            cy="50"
+            r={r}
+            fill="none"
+            stroke="var(--muted)"
+            strokeWidth="8"
+          />
+          <circle
+            cx="50"
+            cy="50"
+            r={r}
+            fill="none"
+            strokeWidth="8"
+            strokeDasharray={circ}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+            style={{
+              stroke: meta.color,
+              transition: "stroke-dashoffset 0.8s ease",
+            }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span
+            className="text-xl font-bold"
+            style={{
+              color: meta.color,
+              fontFamily: "var(--font-family-mono)",
+              lineHeight: 1,
+            }}
+          >
+            {score}
+          </span>
+          <span
+            className="text-xs"
+            style={{ color: "var(--muted-foreground)" }}
+          >
+            /100
+          </span>
+        </div>
+      </div>
+      <div>
         <div
-          className={`h-2 rounded-full ${status.bar} transition-all duration-500`}
-          style={{ width: `${Math.min(100, metric.percentageUsed)}%` }}
-        />
-      </div>
-      <div className="flex justify-between text-xs text-gray-500">
-        <span>{metric.percentageUsed.toFixed(1)}% used</span>
-        <span>{formatValue(metric.remainingValue, metric.unit)} {metric.unit} remaining</span>
+          className="text-xs mb-1"
+          style={{ color: "var(--muted-foreground)" }}
+        >
+          Health Score
+        </div>
+        <StatusBadge status={status} />
+        <div
+          className="text-xs mt-2 leading-relaxed"
+          style={{ color: "var(--muted-foreground)", maxWidth: "180px" }}
+        >
+          {score >= 80
+            ? "All resources are within safe limits."
+            : score >= 60
+              ? "Some resources need attention."
+              : score >= 40
+                ? "Multiple resources are near critical levels."
+                : "Immediate action required on several resources."}
+        </div>
       </div>
     </div>
   );
@@ -62,7 +274,10 @@ export default function DashboardPage() {
   const [usage, setUsage] = useState<UsageMetric[]>([]);
   const [lastChecked, setLastChecked] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const userId = "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11";
 
   useEffect(() => {
     fetchUsage();
@@ -70,7 +285,7 @@ export default function DashboardPage() {
 
   async function fetchUsage() {
     try {
-      const res = await fetch("/api/usage?userId=a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11");
+      const res = await fetch(`/api/usage?userId=${userId}`);
       if (!res.ok) throw new Error("Failed to fetch usage");
       const data = await res.json();
       setUsage(data.usage || []);
@@ -82,90 +297,313 @@ export default function DashboardPage() {
     }
   }
 
-  const overallStatus = usage.length > 0
-    ? usage.reduce((worst, m) => {
-        const order = { critical: 4, danger: 3, warning: 2, watch: 1, safe: 0 };
-        const current = getStatusColor(m.percentageUsed);
-        const worstKey = Object.keys(order).find((k) => order[k as keyof typeof order] === worst) || "safe";
-        return Math.max(worst, order[current.label.toLowerCase() as keyof typeof order] || 0);
-      }, 0)
-    : 0;
+  const handleRefresh = () => {
+    setSyncing(true);
+    setLoading(true);
+    setError(null);
+    fetchUsage().finally(() => setSyncing(false));
+  };
 
-  const overallLabel = ["SAFE", "WATCH", "WARNING", "DANGER", "CRITICAL"][overallStatus] || "SAFE";
-  const overallColor = getStatusColor(overallStatus === 0 ? 0 : overallStatus * 25);
+  const criticalCount = usage.filter(
+    (m) => getStatus(m.percentageUsed) === "critical"
+  ).length;
+  const dangerCount = usage.filter(
+    (m) => getStatus(m.percentageUsed) === "danger"
+  ).length;
+  const safeCount = usage.filter(
+    (m) => getStatus(m.percentageUsed) === "safe"
+  ).length;
+  const avgPct =
+    usage.length > 0
+      ? Math.round(
+          usage.reduce((acc, m) => acc + m.percentageUsed, 0) / usage.length
+        )
+      : 0;
+  const healthScore = Math.max(10, 100 - avgPct);
+  const healthStatus = getStatus(100 - healthScore);
+
+  const lastSyncText = lastChecked
+    ? (() => {
+        const diff = Date.now() - new Date(lastChecked).getTime();
+        const mins = Math.floor(diff / 60000);
+        if (mins < 1) return "just now";
+        if (mins < 60) return `${mins} min ago`;
+        const hrs = Math.floor(mins / 60);
+        return `${hrs} hr${hrs > 1 ? "s" : ""} ago`;
+      })()
+    : "never";
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Usage Dashboard</h1>
-          <p className="text-gray-400 text-sm mt-1">Vercel Hobby plan resource monitoring</p>
+    <div className="flex min-h-screen" style={{ background: "var(--background)" }}>
+      <Sidebar connected={true} />
+      <main className="flex-1 ml-[220px] p-8 max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-8">
+          <div>
+            <h1
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Dashboard
+            </h1>
+            <p
+              className="text-sm mt-1"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              Vercel Hobby plan · Billing cycle resets Jun 30, 2026
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div
+              className="flex items-center gap-2 text-xs"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              <Clock className="w-3.5 h-3.5" />
+              Synced {lastSyncText}
+            </div>
+            <button
+              onClick={handleRefresh}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium border transition-all hover:opacity-80 active:scale-95"
+              style={{
+                background: "var(--card)",
+                border: "1px solid var(--border)",
+                color: "var(--foreground)",
+              }}
+            >
+              <RefreshCw
+                className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`}
+              />
+              Refresh
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          {lastChecked && (
-            <span className="text-xs text-gray-500">
-              Last checked: {new Date(lastChecked).toLocaleString()}
-            </span>
-          )}
-          <button
-            onClick={fetchUsage}
-            className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg text-sm transition-colors"
+
+        {loading && !syncing && (
+          <div
+            className="text-center py-20"
+            style={{ color: "var(--muted-foreground)" }}
           >
-            Refresh
-          </button>
-        </div>
-      </div>
+            <div
+              className="animate-spin w-8 h-8 border-2 rounded-full mx-auto mb-4"
+              style={{
+                borderColor: "var(--border)",
+                borderTopColor: "var(--primary)",
+              }}
+            />
+            Loading usage data...
+          </div>
+        )}
 
-      <div className={`mb-8 p-4 rounded-xl border ${overallColor.bg} border-gray-800 flex items-center gap-4`}>
-        <div className={`w-12 h-12 rounded-lg ${overallColor.bg} flex items-center justify-center ${overallColor.text} text-xl font-bold`}>
-          {overallStatus === 0 && "\u2714"}
-          {overallStatus === 1 && "\u2139"}
-          {overallStatus === 2 && "\u26a0"}
-          {overallStatus === 3 && "\u26a0"}
-          {overallStatus >= 4 && "\u2716"}
-        </div>
-        <div>
-          <h2 className="font-semibold text-white">Overall Health: {overallLabel}</h2>
-          <p className="text-sm text-gray-400">
-            {overallStatus <= 1
-              ? "All resources are within safe limits."
-              : overallStatus <= 2
-              ? "Some resources are approaching warning levels."
-              : overallStatus <= 3
-              ? "Action needed - some resources are near their limits."
-              : "Critical resources detected - take immediate action."}
-          </p>
-        </div>
-      </div>
+        {error && (
+          <div
+            className="p-6 rounded-xl text-center mb-8"
+            style={{
+              background: "var(--status-critical-bg)",
+              border: "1px solid rgba(239,68,68,0.2)",
+            }}
+          >
+            <p style={{ color: "var(--status-critical)" }}>Error: {error}</p>
+            <p
+              className="text-sm mt-2"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              Make sure you have connected your Vercel account in Settings.
+            </p>
+          </div>
+        )}
 
-      {loading && (
-        <div className="text-center py-20 text-gray-500">
-          <div className="animate-spin w-8 h-8 border-2 border-gray-600 border-t-emerald-500 rounded-full mx-auto mb-4" />
-          Loading usage data...
-        </div>
-      )}
+        {!loading && usage.length > 0 && (
+          <>
+            {/* Top summary row */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+              {/* Health ring */}
+              <div
+                className="p-5 rounded-xl border sm:col-span-1"
+                style={{
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <HealthRing score={healthScore} status={healthStatus} />
+              </div>
 
-      {error && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 text-center">
-          <p className="text-red-400">Error: {error}</p>
-          <p className="text-gray-500 text-sm mt-2">Make sure you have connected your Vercel account in Settings.</p>
-        </div>
-      )}
+              {/* Stat cards */}
+              <div className="sm:col-span-2 grid grid-cols-3 gap-4">
+                {[
+                  {
+                    label: "Resources at Risk",
+                    value: dangerCount + criticalCount,
+                    icon: AlertTriangle,
+                    color: "var(--status-danger)",
+                    bg: "var(--status-danger-bg)",
+                  },
+                  {
+                    label: "Warnings",
+                    value: usage.filter(
+                      (m) => getStatus(m.percentageUsed) === "warning"
+                    ).length,
+                    icon: AlertTriangle,
+                    color: "var(--status-warning)",
+                    bg: "var(--status-warning-bg)",
+                  },
+                  {
+                    label: "Resources Safe",
+                    value: safeCount,
+                    icon: CheckCircle,
+                    color: "var(--status-safe)",
+                    bg: "var(--status-safe-bg)",
+                  },
+                ].map((s) => (
+                  <div
+                    key={s.label}
+                    className="p-4 rounded-xl border text-center"
+                    style={{
+                      background: "var(--card)",
+                      border: "1px solid var(--border)",
+                    }}
+                  >
+                    <div
+                      className="w-9 h-9 rounded-lg flex items-center justify-center mx-auto mb-3"
+                      style={{ background: s.bg }}
+                    >
+                      <s.icon className="w-4 h-4" style={{ color: s.color }} />
+                    </div>
+                    <div
+                      className="text-2xl font-bold mb-1"
+                      style={{
+                        fontFamily: "var(--font-family-mono)",
+                        color: s.color,
+                      }}
+                    >
+                      {s.value}
+                    </div>
+                    <div
+                      className="text-xs"
+                      style={{ color: "var(--muted-foreground)" }}
+                    >
+                      {s.label}
+                    </div>
+                  </div>
+                ))}
 
-      {!loading && !error && usage.length === 0 && (
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-12 text-center">
-          <p className="text-gray-400 text-lg mb-2">No usage data available yet</p>
-          <p className="text-gray-500 text-sm">Connect your Vercel account in Settings, then run the monitor to collect usage data.</p>
-        </div>
-      )}
+                {/* Trend card */}
+                <div
+                  className="col-span-3 p-4 rounded-xl border flex items-center justify-between"
+                  style={{
+                    background: "var(--card)",
+                    border: "1px solid var(--border)",
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <TrendingUp
+                      className="w-4 h-4"
+                      style={{ color: "var(--status-danger)" }}
+                    />
+                    <div>
+                      <div className="text-sm font-medium">
+                        Usage trending up
+                      </div>
+                      <div
+                        className="text-xs"
+                        style={{ color: "var(--muted-foreground)" }}
+                      >
+                        Average usage at {avgPct}% across all resources
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="px-2.5 py-1 rounded text-xs font-medium"
+                    style={{
+                      background:
+                        healthScore >= 60
+                          ? "var(--status-safe-bg)"
+                          : "var(--status-danger-bg)",
+                      color:
+                        healthScore >= 60
+                          ? "var(--status-safe)"
+                          : "var(--status-danger)",
+                    }}
+                  >
+                    Health {healthScore}/100
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      {usage.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {usage.map((metric) => (
-            <ResourceCard key={metric.metricKey} metric={metric} />
-          ))}
-        </div>
-      )}
+            {/* Active alerts banner */}
+            {(dangerCount > 0 || criticalCount > 0) && (
+              <div
+                className="mb-6 p-4 rounded-xl flex items-start gap-3"
+                style={{
+                  background: "var(--status-critical-bg)",
+                  border: "1px solid rgba(239,68,68,0.2)",
+                }}
+              >
+                <AlertTriangle
+                  className="w-4 h-4 flex-shrink-0 mt-0.5"
+                  style={{ color: "var(--status-critical)" }}
+                />
+                <div>
+                  <div
+                    className="text-sm font-medium"
+                    style={{ color: "var(--status-critical)" }}
+                  >
+                    {criticalCount + dangerCount} resource
+                    {criticalCount + dangerCount !== 1 ? "s" : ""} need
+                    immediate attention
+                  </div>
+                  <div
+                    className="text-xs mt-0.5"
+                    style={{ color: "var(--muted-foreground)" }}
+                  >
+                    Some resources have crossed danger thresholds
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Usage grid */}
+            <h2
+              className="mb-4"
+              style={{ fontSize: "1rem", fontWeight: 600 }}
+            >
+              Resource Usage
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+              {usage.map((metric) => (
+                <UsageCard key={metric.metricKey} metric={metric} />
+              ))}
+            </div>
+          </>
+        )}
+
+        {!loading && usage.length === 0 && !error && (
+          <div
+            className="p-12 rounded-xl text-center"
+            style={{
+              background: "var(--card)",
+              border: "1px solid var(--border)",
+            }}
+          >
+            <p
+              className="text-lg mb-2"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              No usage data available yet
+            </p>
+            <p
+              className="text-sm"
+              style={{ color: "var(--muted-foreground)" }}
+            >
+              Connect your Vercel account in Settings, then run the monitor to
+              collect usage data.
+            </p>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
