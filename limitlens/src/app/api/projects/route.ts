@@ -25,9 +25,9 @@ export async function GET(request: Request) {
     const token = decrypt(connection[0].encryptedVercelToken);
     const headers = { Authorization: `Bearer ${token}` };
 
-    const [projectsRes, userRes] = await Promise.all([
+    const [projectsRes, teamsRes] = await Promise.all([
       fetch("https://api.vercel.com/v9/projects", { headers }),
-      fetch("https://api.vercel.com/v2/user", { headers }),
+      fetch("https://api.vercel.com/v2/teams", { headers }),
     ]);
 
     if (!projectsRes.ok) {
@@ -36,22 +36,12 @@ export async function GET(request: Request) {
 
     const projectsData = await projectsRes.json();
     let teamSlug = "";
-    if (userRes.ok) {
-      const userData = await userRes.json();
-      teamSlug = userData.user?.name?.toLowerCase().replace(/\s+/g, "-") || "";
-    }
 
-    const connRes = await fetch(`https://api.vercel.com/v13/deployments?limit=1`, { headers });
-    let detectedTeamSlug = teamSlug;
-    if (connRes.ok) {
-      const connData = await connRes.json();
-      if (connData.deployments?.[0]?.url) {
-        const deploymentUrl = connData.deployments[0].url;
-        const match = deploymentUrl.match(/^([^.]+)\./);
-        if (match) {
-          const parts = match[1].split("-");
-          detectedTeamSlug = parts.slice(0, -1).join("-");
-        }
+    if (teamsRes.ok) {
+      const teamsData = await teamsRes.json();
+      const team = teamsData.teams?.[0];
+      if (team?.slug) {
+        teamSlug = team.slug;
       }
     }
 
@@ -62,7 +52,7 @@ export async function GET(request: Request) {
       createdAt: p.createdAt,
       updatedAt: p.updatedAt,
       targets: p.targets ? Object.keys(p.targets) : [],
-      vercelUrl: `https://vercel.com/${detectedTeamSlug}/${p.name}`,
+      vercelUrl: teamSlug ? `https://vercel.com/${teamSlug}/${p.name}` : "#",
       latestDeployment: p.latestDeployments?.[0] ? {
         url: p.latestDeployments[0].url,
         createdAt: p.latestDeployments[0].createdAt,
