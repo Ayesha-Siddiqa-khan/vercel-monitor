@@ -9,6 +9,7 @@ interface Project {
   createdAt: string;
   updatedAt: string;
   targets: string[];
+  vercelUrl: string;
   latestDeployment: {
     url: string;
     createdAt: string;
@@ -103,7 +104,14 @@ export default function ProjectsPage() {
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <h3 className="font-medium text-white">{project.name}</h3>
+                  <a
+                    href={project.vercelUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-white hover:text-emerald-400 transition-colors"
+                  >
+                    {project.name}
+                  </a>
                   {project.framework && (
                     <span className="px-2 py-0.5 bg-gray-800 text-gray-400 text-xs rounded">
                       {project.framework}
