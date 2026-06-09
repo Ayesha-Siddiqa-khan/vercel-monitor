@@ -71,7 +71,7 @@ Suggested product names:
 - HobbyLimit Monitor
 - QuotaPilot
 
-Recommended MVP name: **FreeQuota Watch**
+Recommended MVP name: **LimitLens**
 
 ---
 
