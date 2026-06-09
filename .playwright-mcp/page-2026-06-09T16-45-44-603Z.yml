@@ -1,0 +1,121 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: LL
+        - generic [ref=e7]: LimitLens
+      - generic [ref=e8]:
+        - link "Dashboard" [ref=e9] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Projects" [ref=e10] [cursor=pointer]:
+          - /url: /projects
+        - link "Alerts" [ref=e11] [cursor=pointer]:
+          - /url: /alerts
+        - link "Settings" [ref=e12] [cursor=pointer]:
+          - /url: /settings
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - heading "Usage Dashboard" [level=1] [ref=e17]
+          - paragraph [ref=e18]: Vercel Hobby plan resource monitoring
+        - generic [ref=e19]:
+          - generic [ref=e29]: "Last checked: 6/9/2026, 8:59:20 PM"
+          - button "Refresh" [ref=e20]
+      - generic [ref=e21]:
+        - generic [ref=e22]: ✔
+        - generic [ref=e23]:
+          - 'heading "Overall Health: SAFE" [level=2] [ref=e24]'
+          - paragraph [ref=e25]: All resources are within safe limits.
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - heading "Project Count" [level=3] [ref=e33]
+            - generic [ref=e34]: SAFE
+          - generic [ref=e35]:
+            - text: "2.0"
+            - generic [ref=e36]: / 200.0 projects
+          - generic [ref=e39]:
+            - generic [ref=e40]: 1.0% used
+            - generic [ref=e41]: 198.0 projects remaining
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - heading "Build Execution Minutes" [level=3] [ref=e44]
+            - generic [ref=e45]: SAFE
+          - generic [ref=e46]:
+            - text: "600.0"
+            - generic [ref=e47]: / 6000.0 minutes
+          - generic [ref=e50]:
+            - generic [ref=e51]: 10.0% used
+            - generic [ref=e52]: 5400.0 minutes remaining
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - heading "Isr Writes" [level=3] [ref=e55]
+            - generic [ref=e56]: SAFE
+          - generic [ref=e57]:
+            - text: 20,000
+            - generic [ref=e58]: / 200,000 writes
+          - generic [ref=e61]:
+            - generic [ref=e62]: 10.0% used
+            - generic [ref=e63]: 180,000 writes remaining
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - heading "Isr Reads" [level=3] [ref=e66]
+            - generic [ref=e67]: SAFE
+          - generic [ref=e68]:
+            - text: 100,000
+            - generic [ref=e69]: / 1,000,000 reads
+          - generic [ref=e72]:
+            - generic [ref=e73]: 10.0% used
+            - generic [ref=e74]: 900,000 reads remaining
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - heading "Fast Data Transfer" [level=3] [ref=e77]
+            - generic [ref=e78]: SAFE
+          - generic [ref=e79]:
+            - text: "10.0"
+            - generic [ref=e80]: / 100.0 GB
+          - generic [ref=e83]:
+            - generic [ref=e84]: 10.0% used
+            - generic [ref=e85]: 90.0 GB remaining
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - heading "Function Invocations" [level=3] [ref=e88]
+            - generic [ref=e89]: SAFE
+          - generic [ref=e90]:
+            - text: 100,000
+            - generic [ref=e91]: / 1,000,000 invocations
+          - generic [ref=e94]:
+            - generic [ref=e95]: 10.0% used
+            - generic [ref=e96]: 900,000 invocations remaining
+        - generic [ref=e97]:
+          - generic [ref=e98]:
+            - heading "Edge Requests" [level=3] [ref=e99]
+            - generic [ref=e100]: SAFE
+          - generic [ref=e101]:
+            - text: 100,000
+            - generic [ref=e102]: / 1,000,000 requests
+          - generic [ref=e105]:
+            - generic [ref=e106]: 10.0% used
+            - generic [ref=e107]: 900,000 requests remaining
+        - generic [ref=e108]:
+          - generic [ref=e109]:
+            - heading "Provisioned Memory" [level=3] [ref=e110]
+            - generic [ref=e111]: SAFE
+          - generic [ref=e112]:
+            - text: "36.0"
+            - generic [ref=e113]: / 360.0 GB-hrs
+          - generic [ref=e116]:
+            - generic [ref=e117]: 10.0% used
+            - generic [ref=e118]: 324.0 GB-hrs remaining
+        - generic [ref=e119]:
+          - generic [ref=e120]:
+            - heading "Active Cpu Hours" [level=3] [ref=e121]
+            - generic [ref=e122]: SAFE
+          - generic [ref=e123]:
+            - text: "0.4"
+            - generic [ref=e124]: / 4.0 CPU-hrs
+          - generic [ref=e127]:
+            - generic [ref=e128]: 10.0% used
+            - generic [ref=e129]: 3.6 CPU-hrs remaining
+  - alert [ref=e28]

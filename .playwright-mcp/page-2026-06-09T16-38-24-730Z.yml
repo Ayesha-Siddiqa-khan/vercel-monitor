@@ -1,0 +1,176 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: LL
+        - generic [ref=e7]: LimitLens
+      - generic [ref=e8]:
+        - link "Dashboard" [ref=e9] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Projects" [ref=e10] [cursor=pointer]:
+          - /url: /projects
+        - link "Alerts" [ref=e11] [cursor=pointer]:
+          - /url: /alerts
+        - link "Settings" [ref=e12] [cursor=pointer]:
+          - /url: /settings
+  - main [ref=e13]:
+    - generic [ref=e14]:
+      - heading "Alert Rules" [level=1] [ref=e15]
+      - paragraph [ref=e16]: Configure thresholds for Gmail notifications
+      - generic [ref=e17]:
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - heading "Active CPU Hours" [level=3] [ref=e30]
+            - button "Enabled" [ref=e31]
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - generic [ref=e34]: Warning %
+              - spinbutton [ref=e35]: "75"
+            - generic [ref=e36]:
+              - generic [ref=e37]: Danger %
+              - spinbutton [ref=e38]: "85"
+            - generic [ref=e39]:
+              - generic [ref=e40]: Critical %
+              - spinbutton [ref=e41]: "95"
+            - generic [ref=e42]:
+              - generic [ref=e43]: Cooldown (min)
+              - spinbutton [ref=e44]: "60"
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - heading "Provisioned Memory" [level=3] [ref=e47]
+            - button "Enabled" [ref=e48]
+          - generic [ref=e49]:
+            - generic [ref=e50]:
+              - generic [ref=e51]: Warning %
+              - spinbutton [ref=e52]: "75"
+            - generic [ref=e53]:
+              - generic [ref=e54]: Danger %
+              - spinbutton [ref=e55]: "85"
+            - generic [ref=e56]:
+              - generic [ref=e57]: Critical %
+              - spinbutton [ref=e58]: "95"
+            - generic [ref=e59]:
+              - generic [ref=e60]: Cooldown (min)
+              - spinbutton [ref=e61]: "60"
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - heading "Edge Requests" [level=3] [ref=e64]
+            - button "Enabled" [ref=e65]
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - generic [ref=e68]: Warning %
+              - spinbutton [ref=e69]: "75"
+            - generic [ref=e70]:
+              - generic [ref=e71]: Danger %
+              - spinbutton [ref=e72]: "85"
+            - generic [ref=e73]:
+              - generic [ref=e74]: Critical %
+              - spinbutton [ref=e75]: "95"
+            - generic [ref=e76]:
+              - generic [ref=e77]: Cooldown (min)
+              - spinbutton [ref=e78]: "60"
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - heading "Function Invocations" [level=3] [ref=e81]
+            - button "Enabled" [ref=e82]
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - generic [ref=e85]: Warning %
+              - spinbutton [ref=e86]: "75"
+            - generic [ref=e87]:
+              - generic [ref=e88]: Danger %
+              - spinbutton [ref=e89]: "85"
+            - generic [ref=e90]:
+              - generic [ref=e91]: Critical %
+              - spinbutton [ref=e92]: "95"
+            - generic [ref=e93]:
+              - generic [ref=e94]: Cooldown (min)
+              - spinbutton [ref=e95]: "60"
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - heading "Fast Data Transfer" [level=3] [ref=e98]
+            - button "Enabled" [ref=e99]
+          - generic [ref=e100]:
+            - generic [ref=e101]:
+              - generic [ref=e102]: Warning %
+              - spinbutton [ref=e103]: "75"
+            - generic [ref=e104]:
+              - generic [ref=e105]: Danger %
+              - spinbutton [ref=e106]: "85"
+            - generic [ref=e107]:
+              - generic [ref=e108]: Critical %
+              - spinbutton [ref=e109]: "95"
+            - generic [ref=e110]:
+              - generic [ref=e111]: Cooldown (min)
+              - spinbutton [ref=e112]: "60"
+        - generic [ref=e113]:
+          - generic [ref=e114]:
+            - heading "ISR Reads" [level=3] [ref=e115]
+            - button "Enabled" [ref=e116]
+          - generic [ref=e117]:
+            - generic [ref=e118]:
+              - generic [ref=e119]: Warning %
+              - spinbutton [ref=e120]: "75"
+            - generic [ref=e121]:
+              - generic [ref=e122]: Danger %
+              - spinbutton [ref=e123]: "85"
+            - generic [ref=e124]:
+              - generic [ref=e125]: Critical %
+              - spinbutton [ref=e126]: "95"
+            - generic [ref=e127]:
+              - generic [ref=e128]: Cooldown (min)
+              - spinbutton [ref=e129]: "60"
+        - generic [ref=e130]:
+          - generic [ref=e131]:
+            - heading "ISR Writes" [level=3] [ref=e132]
+            - button "Enabled" [ref=e133]
+          - generic [ref=e134]:
+            - generic [ref=e135]:
+              - generic [ref=e136]: Warning %
+              - spinbutton [ref=e137]: "75"
+            - generic [ref=e138]:
+              - generic [ref=e139]: Danger %
+              - spinbutton [ref=e140]: "85"
+            - generic [ref=e141]:
+              - generic [ref=e142]: Critical %
+              - spinbutton [ref=e143]: "95"
+            - generic [ref=e144]:
+              - generic [ref=e145]: Cooldown (min)
+              - spinbutton [ref=e146]: "60"
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - heading "Build Execution Minutes" [level=3] [ref=e149]
+            - button "Enabled" [ref=e150]
+          - generic [ref=e151]:
+            - generic [ref=e152]:
+              - generic [ref=e153]: Warning %
+              - spinbutton [ref=e154]: "75"
+            - generic [ref=e155]:
+              - generic [ref=e156]: Danger %
+              - spinbutton [ref=e157]: "85"
+            - generic [ref=e158]:
+              - generic [ref=e159]: Critical %
+              - spinbutton [ref=e160]: "95"
+            - generic [ref=e161]:
+              - generic [ref=e162]: Cooldown (min)
+              - spinbutton [ref=e163]: "60"
+        - generic [ref=e164]:
+          - generic [ref=e165]:
+            - heading "Project Count" [level=3] [ref=e166]
+            - button "Enabled" [ref=e167]
+          - generic [ref=e168]:
+            - generic [ref=e169]:
+              - generic [ref=e170]: Warning %
+              - spinbutton [ref=e171]: "75"
+            - generic [ref=e172]:
+              - generic [ref=e173]: Danger %
+              - spinbutton [ref=e174]: "85"
+            - generic [ref=e175]:
+              - generic [ref=e176]: Critical %
+              - spinbutton [ref=e177]: "95"
+            - generic [ref=e178]:
+              - generic [ref=e179]: Cooldown (min)
+              - spinbutton [ref=e180]: "60"
+  - button "Open Next.js Dev Tools" [ref=e23] [cursor=pointer]:
+    - img [ref=e24]
+  - alert [ref=e27]
