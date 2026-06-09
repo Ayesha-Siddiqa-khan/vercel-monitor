@@ -53,15 +53,13 @@ export default function ProjectsPage() {
   const [search, setSearch] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
-  const userId = "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11";
-
   useEffect(() => {
     fetchProjects();
   }, []);
 
   async function fetchProjects() {
     try {
-      const res = await fetch(`/api/projects?userId=${userId}`);
+      const res = await fetch("/api/projects");
       const data = await res.json();
       setProjects(data.projects || []);
       setConnected(data.connected || false);

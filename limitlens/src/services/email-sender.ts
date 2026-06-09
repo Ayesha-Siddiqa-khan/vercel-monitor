@@ -38,6 +38,7 @@ export async function sendEmail(payload: EmailPayload): Promise<boolean> {
 }
 
 export function buildThresholdAlertEmail(params: {
+  to: string;
   name: string;
   metric: string;
   percentage: number;
@@ -61,7 +62,7 @@ export function buildThresholdAlertEmail(params: {
   }[params.level] || "Alert";
 
   return {
-    to: process.env.ALERT_TO_EMAIL || "",
+    to: params.to,
     subject: `${levelEmoji} Vercel ${levelLabel}: ${params.metric} reached ${params.percentage.toFixed(1)}%`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -86,6 +87,7 @@ export function buildThresholdAlertEmail(params: {
 }
 
 export function buildDailySummaryEmail(params: {
+  to: string;
   name: string;
   resources: Array<{
     metric: string;
@@ -110,7 +112,7 @@ export function buildDailySummaryEmail(params: {
     .join("");
 
   return {
-    to: process.env.ALERT_TO_EMAIL || "",
+    to: params.to,
     subject: `Daily Vercel usage summary - ${params.overallStatus}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

@@ -12,7 +12,6 @@ import {
   CheckCircle,
   AlertCircle,
   Key,
-  Users,
   Zap,
 } from "lucide-react";
 import { Sidebar } from "@/components/Sidebar";
@@ -21,9 +20,6 @@ type Step = "token" | "verify" | "success";
 
 export default function SettingsPage() {
   const [step, setStep] = useState<Step>("token");
-  const [userId, setUserId] = useState(
-    "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
-  );
   const [token, setToken] = useState("");
   const [teamId, setTeamId] = useState("");
   const [showToken, setShowToken] = useState(false);
@@ -43,7 +39,6 @@ export default function SettingsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: userId || "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
           vercelToken: token,
           teamId: teamId || undefined,
         }),
@@ -102,7 +97,6 @@ export default function SettingsPage() {
               }}
             >
               {[
-                { label: "User ID", value: userId, mono: true },
                 {
                   label: "Account type",
                   value: "Hobby (Free plan)",
@@ -126,13 +120,9 @@ export default function SettingsPage() {
                   <span
                     className="text-sm font-medium"
                     style={{
-                      fontFamily: row.mono
-                        ? "var(--font-family-mono)"
-                        : undefined,
                       color: row.green
                         ? "var(--status-safe)"
                         : "var(--foreground)",
-                      fontSize: row.mono ? "0.75rem" : undefined,
                     }}
                   >
                     {row.value}
@@ -264,33 +254,6 @@ export default function SettingsPage() {
               }}
             >
               <div className="space-y-5">
-                {/* User ID */}
-                <div>
-                  <label className="block text-sm font-medium mb-1.5">
-                    <span className="flex items-center gap-2">
-                      <Users className="w-3.5 h-3.5" />
-                      User ID
-                    </span>
-                  </label>
-                  <input
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-lg text-sm outline-none"
-                    style={{
-                      background: "var(--input-background)",
-                      border: "1px solid var(--border)",
-                      color: "var(--foreground)",
-                      fontFamily: "var(--font-family-mono)",
-                    }}
-                  />
-                  <p
-                    className="text-xs mt-1.5"
-                    style={{ color: "var(--muted-foreground)" }}
-                  >
-                    Find your User ID in Vercel Account Settings → General
-                  </p>
-                </div>
-
                 {/* Token */}
                 <div>
                   <label className="block text-sm font-medium mb-1.5">

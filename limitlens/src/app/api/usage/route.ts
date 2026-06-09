@@ -1,19 +1,16 @@
 import { db } from "@/db";
-import { usageSnapshots, users, vercelConnections } from "@/db/schema";
+import { usageSnapshots } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
+import { getAuthenticatedUserId } from "@/lib/supabase/api-auth";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get("userId");
-
-  if (!userId) {
-    return Response.json({ error: "userId is required" }, { status: 400 });
-  }
+export async function GET() {
+  const auth = await getAuthenticatedUserId();
+  if (auth.error) return auth.error;
 
   const latestSnapshots = await db
     .select()
     .from(usageSnapshots)
-    .where(eq(usageSnapshots.userId, userId))
+    .where(eq(usageSnapshots.userId, auth.userId))
     .orderBy(desc(usageSnapshots.checkedAt))
     .limit(50);
 

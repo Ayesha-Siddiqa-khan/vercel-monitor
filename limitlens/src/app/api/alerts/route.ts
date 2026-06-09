@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { alertRules } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
+import { getAuthenticatedUserId } from "@/lib/supabase/api-auth";
 
 const DEFAULT_METRICS = [
   "active_cpu_hours",
@@ -14,40 +15,32 @@ const DEFAULT_METRICS = [
   "project_count",
 ];
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get("userId");
-
-  if (!userId) {
-    return Response.json({ error: "userId is required" }, { status: 400 });
-  }
+export async function GET() {
+  const auth = await getAuthenticatedUserId();
+  if (auth.error) return auth.error;
 
   const rules = await db
     .select()
     .from(alertRules)
-    .where(eq(alertRules.userId, userId));
+    .where(eq(alertRules.userId, auth.userId));
 
   return Response.json({ rules });
 }
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
-    const body = await request.json();
-    const { userId } = body;
-
-    if (!userId) {
-      return Response.json({ error: "userId is required" }, { status: 400 });
-    }
+    const auth = await getAuthenticatedUserId();
+    if (auth.error) return auth.error;
 
     const existingRules = await db
       .select()
       .from(alertRules)
-      .where(eq(alertRules.userId, userId));
+      .where(eq(alertRules.userId, auth.userId));
 
     const existingMetricKeys = new Set(existingRules.map((r) => r.metricKey));
 
     const newRules = DEFAULT_METRICS.filter((m) => !existingMetricKeys.has(m)).map((metricKey) => ({
-      userId,
+      userId: auth.userId,
       metricKey,
       warningThreshold: 75,
       dangerThreshold: 85,
@@ -63,7 +56,7 @@ export async function POST(request: Request) {
     const allRules = await db
       .select()
       .from(alertRules)
-      .where(eq(alertRules.userId, userId));
+      .where(eq(alertRules.userId, auth.userId));
 
     return Response.json({ rules: allRules, created: newRules.length });
   } catch (error: any) {
@@ -73,11 +66,14 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    const body = await request.json();
-    const { userId, metricKey, warningThreshold, dangerThreshold, criticalThreshold, cooldownMinutes, enabled } = body;
+    const auth = await getAuthenticatedUserId();
+    if (auth.error) return auth.error;
 
-    if (!userId || !metricKey) {
-      return Response.json({ error: "userId and metricKey required" }, { status: 400 });
+    const body = await request.json();
+    const { metricKey, warningThreshold, dangerThreshold, criticalThreshold, cooldownMinutes, enabled } = body;
+
+    if (!metricKey) {
+      return Response.json({ error: "metricKey required" }, { status: 400 });
     }
 
     await db
@@ -89,7 +85,7 @@ export async function PUT(request: Request) {
         cooldownMinutes,
         enabled,
       })
-      .where(and(eq(alertRules.userId, userId), eq(alertRules.metricKey, metricKey)));
+      .where(and(eq(alertRules.userId, auth.userId), eq(alertRules.metricKey, metricKey)));
 
     return Response.json({ success: true });
   } catch (error: any) {

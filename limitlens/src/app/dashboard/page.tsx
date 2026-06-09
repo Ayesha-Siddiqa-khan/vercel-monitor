@@ -277,15 +277,13 @@ export default function DashboardPage() {
   const [syncing, setSyncing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const userId = "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11";
-
   useEffect(() => {
     fetchUsage();
   }, []);
 
   async function fetchUsage() {
     try {
-      const res = await fetch(`/api/usage?userId=${userId}`);
+      const res = await fetch("/api/usage");
       if (!res.ok) throw new Error("Failed to fetch usage");
       const data = await res.json();
       setUsage(data.usage || []);

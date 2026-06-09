@@ -79,15 +79,13 @@ export default function AlertsPage() {
   );
   const [email, setEmail] = useState("alex@gmail.com");
 
-  const userId = "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11";
-
   useEffect(() => {
     fetchRules();
   }, []);
 
   async function fetchRules() {
     try {
-      const res = await fetch(`/api/alerts?userId=${userId}`);
+      const res = await fetch("/api/alerts");
       const data = await res.json();
       const fetchedRules = data.rules || [];
 
@@ -109,7 +107,6 @@ export default function AlertsPage() {
       const res = await fetch("/api/alerts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
       });
       const data = await res.json();
       setRules(data.rules || []);
@@ -126,7 +123,7 @@ export default function AlertsPage() {
       await fetch("/api/alerts", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, ...updated }),
+        body: JSON.stringify(updated),
       });
       setRules(rules.map((r) => (r.id === rule.id ? updated : r)));
     } catch (err) {

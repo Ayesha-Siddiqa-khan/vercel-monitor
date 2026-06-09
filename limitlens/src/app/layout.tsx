@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AuthProvider } from "@/lib/auth-context";
 
 export const metadata: Metadata = {
   title: "LimitLens - Vercel Hobby Usage Monitor",
@@ -14,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ background: "var(--background)", color: "var(--foreground)", fontFamily: "var(--font-family-sans)" }}>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

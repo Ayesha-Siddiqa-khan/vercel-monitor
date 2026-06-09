@@ -2,17 +2,21 @@ import { db } from "@/db";
 import { vercelConnections, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { encrypt } from "@/lib/encryption";
+import { getAuthenticatedUserId } from "@/lib/supabase/api-auth";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { userId, vercelToken, teamId, connectionName } = body;
+    const auth = await getAuthenticatedUserId();
+    if (auth.error) return auth.error;
 
-    if (!userId || !vercelToken) {
-      return Response.json({ error: "userId and vercelToken are required" }, { status: 400 });
+    const body = await request.json();
+    const { vercelToken, teamId, connectionName } = body;
+
+    if (!vercelToken) {
+      return Response.json({ error: "vercelToken is required" }, { status: 400 });
     }
 
-    const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    const user = await db.select().from(users).where(eq(users.id, auth.userId)).limit(1);
     if (user.length === 0) {
       return Response.json({ error: "User not found" }, { status: 404 });
     }
@@ -28,7 +32,7 @@ export async function POST(request: Request) {
     const [connection] = await db
       .insert(vercelConnections)
       .values({
-        userId,
+        userId: auth.userId,
         encryptedVercelToken: encryptedToken,
         teamId: teamId || null,
         connectionName: connectionName || "default",

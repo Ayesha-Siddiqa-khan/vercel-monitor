@@ -12,7 +12,9 @@ import {
   ExternalLink,
   ChevronRight,
   Circle,
+  LogOut,
 } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 
 const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
@@ -29,6 +31,7 @@ interface SidebarProps {
 
 export function Sidebar({ connected = false, alertCount = 0 }: SidebarProps) {
   const pathname = usePathname();
+  const { user, signOut } = useAuth();
 
   const getCurrentPage = () => {
     if (pathname === "/dashboard") return "dashboard";
@@ -40,6 +43,10 @@ export function Sidebar({ connected = false, alertCount = 0 }: SidebarProps) {
   };
 
   const currentPage = getCurrentPage();
+
+  const userInitial = user?.email?.[0]?.toUpperCase() || "?";
+  const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "User";
+  const userEmail = user?.email || "";
 
   return (
     <aside
@@ -171,28 +178,36 @@ export function Sidebar({ connected = false, alertCount = 0 }: SidebarProps) {
           <span>Docs</span>
         </a>
 
-        {/* User */}
+        {/* User info + logout */}
         <div className="flex items-center gap-3 px-3 py-2.5 mt-1">
           <div
             className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold"
             style={{ background: "var(--muted)", color: "var(--foreground)" }}
           >
-            A
+            {userInitial}
           </div>
           <div className="flex-1 min-w-0">
             <div
               className="text-xs font-medium truncate"
               style={{ color: "var(--sidebar-accent-foreground)" }}
             >
-              Alex Kim
+              {userName}
             </div>
             <div
               className="text-xs truncate"
               style={{ color: "var(--sidebar-foreground)" }}
             >
-              Hobby plan
+              {userEmail}
             </div>
           </div>
+          <button
+            onClick={signOut}
+            className="p-1.5 rounded-md transition-opacity hover:opacity-80"
+            style={{ color: "var(--muted-foreground)" }}
+            title="Sign out"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
     </aside>

@@ -1,20 +1,19 @@
 import { db } from "@/db";
 import { usageSnapshots } from "@/db/schema";
 import { eq, asc } from "drizzle-orm";
+import { getAuthenticatedUserId } from "@/lib/supabase/api-auth";
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get("userId");
-  const metricKey = searchParams.get("metricKey");
+  const auth = await getAuthenticatedUserId();
+  if (auth.error) return auth.error;
 
-  if (!userId) {
-    return Response.json({ error: "userId is required" }, { status: 400 });
-  }
+  const { searchParams } = new URL(request.url);
+  const metricKey = searchParams.get("metricKey");
 
   let query = db
     .select()
     .from(usageSnapshots)
-    .where(eq(usageSnapshots.userId, userId))
+    .where(eq(usageSnapshots.userId, auth.userId))
     .orderBy(asc(usageSnapshots.checkedAt))
     .limit(200);
 

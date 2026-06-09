@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { alertRules, alertEvents, usageSnapshots, monitorRuns } from "../db/schema";
+import { alertRules, alertEvents, usageSnapshots, monitorRuns, notificationChannels } from "../db/schema";
 import { eq, and, gt } from "drizzle-orm";
 import { getPercentageUsed, getStatusLevel, getRecommendation } from "./vercel-collector";
 import { sendEmail, buildThresholdAlertEmail } from "./email-sender";
@@ -52,7 +52,20 @@ export async function checkAndSendAlerts(
     }
 
     const recommendation = getRecommendation(statusLevel, metric.metricKey);
+
+    const channel = await db
+      .select()
+      .from(notificationChannels)
+      .where(and(eq(notificationChannels.userId, userId), eq(notificationChannels.enabled, true)))
+      .limit(1);
+
+    if (channel.length === 0) {
+      result.details.push({ metricKey: metric.metricKey, level: statusLevel, percentage, sent: false });
+      continue;
+    }
+
     const emailPayload = buildThresholdAlertEmail({
+      to: channel[0].emailTo,
       name: userName,
       metric: metric.metricKey.replace(/_/g, " "),
       percentage,

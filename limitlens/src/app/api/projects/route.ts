@@ -1,20 +1,17 @@
 import { db } from "@/db";
-import { users, vercelConnections } from "@/db/schema";
+import { vercelConnections } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { decrypt } from "@/lib/encryption";
+import { getAuthenticatedUserId } from "@/lib/supabase/api-auth";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const userId = searchParams.get("userId");
-
-  if (!userId) {
-    return Response.json({ error: "userId is required" }, { status: 400 });
-  }
+export async function GET() {
+  const auth = await getAuthenticatedUserId();
+  if (auth.error) return auth.error;
 
   const connection = await db
     .select()
     .from(vercelConnections)
-    .where(eq(vercelConnections.userId, userId))
+    .where(eq(vercelConnections.userId, auth.userId))
     .limit(1);
 
   if (connection.length === 0 || connection[0].status !== "active") {
