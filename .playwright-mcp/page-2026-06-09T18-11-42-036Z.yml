@@ -1,0 +1,27 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e6]: LL
+      - generic [ref=e7]: LimitLens
+    - generic [ref=e8]:
+      - heading "Welcome back" [level=1] [ref=e9]
+      - paragraph [ref=e10]: Sign in to monitor your Vercel usage
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - generic [ref=e13]: Email
+          - textbox "you@example.com" [ref=e14]
+        - generic [ref=e15]:
+          - generic [ref=e16]: Password
+          - generic [ref=e17]:
+            - textbox "Your password" [ref=e18]
+            - button [ref=e19]:
+              - img [ref=e20]
+        - button "Sign In" [ref=e23]:
+          - text: Sign In
+          - img [ref=e24]
+      - paragraph [ref=e26]:
+        - text: Don't have an account?
+        - link "Sign up" [ref=e27] [cursor=pointer]:
+          - /url: /signup
+  - button "Open Next.js Dev Tools" [ref=e33] [cursor=pointer]:
+    - img [ref=e34]

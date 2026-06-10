@@ -1,0 +1,32 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e33] [cursor=pointer]:
+    - img [ref=e34]
+  - alert [ref=e37]
+  - generic [ref=e39]:
+    - generic [ref=e40]:
+      - generic [ref=e42]: LL
+      - generic [ref=e43]: LimitLens
+    - generic [ref=e44]:
+      - heading "Create your account" [level=1] [ref=e45]
+      - paragraph [ref=e46]: Start monitoring your Vercel Hobby plan usage
+      - generic [ref=e67]: email rate limit exceeded
+      - generic [ref=e47]:
+        - generic [ref=e48]:
+          - generic [ref=e49]: Full Name
+          - textbox "Alex Kim" [ref=e50]: Test User Two
+        - generic [ref=e51]:
+          - generic [ref=e52]: Email
+          - textbox "you@example.com" [ref=e53]: testuser2@limitlens.app
+        - generic [ref=e54]:
+          - generic [ref=e55]: Password
+          - generic [ref=e56]:
+            - textbox "At least 6 characters" [ref=e57]: testpassword123
+            - button [ref=e58]:
+              - img [ref=e59]
+        - button "Create Account" [ref=e62]:
+          - text: Create Account
+          - img [ref=e68]
+      - paragraph [ref=e65]:
+        - text: Already have an account?
+        - link "Sign in" [ref=e66] [cursor=pointer]:
+          - /url: /login

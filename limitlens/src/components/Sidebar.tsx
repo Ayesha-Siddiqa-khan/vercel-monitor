@@ -9,7 +9,6 @@ import {
   Bell,
   Settings,
   Zap,
-  ExternalLink,
   ChevronRight,
   Circle,
   LogOut,
@@ -169,15 +168,6 @@ export function Sidebar({ connected = false, alertCount = 0 }: SidebarProps) {
           <Zap className="w-4 h-4" />
           <span>Vercel Setup</span>
         </Link>
-        <a
-          href="#"
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all hover:opacity-80"
-          style={{ color: "var(--sidebar-foreground)" }}
-        >
-          <ExternalLink className="w-4 h-4" />
-          <span>Docs</span>
-        </a>
-
         {/* User info + logout */}
         <div className="flex items-center gap-3 px-3 py-2.5 mt-1">
           <div

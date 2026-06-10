@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   RefreshCw,
   ExternalLink,
+  Globe,
   Clock,
   GitBranch,
   CheckCircle,
@@ -20,6 +21,7 @@ interface Project {
   updatedAt: string;
   targets: string[];
   vercelUrl: string;
+  liveUrl: string | null;
   latestDeployment: {
     url: string;
     createdAt: string;
@@ -235,6 +237,12 @@ export default function ProjectsPage() {
                           <ExternalLink className="w-3 h-3" />
                           Vercel Dashboard
                         </a>
+                        {project.liveUrl && (
+                          <a href={project.liveUrl} className="flex items-center gap-1.5 hover:opacity-80" style={{ color: "var(--status-safe)" }} target="_blank" rel="noopener noreferrer">
+                            <Globe className="w-3 h-3" />
+                            Live App
+                          </a>
+                        )}
                       </div>
                     </div>
 

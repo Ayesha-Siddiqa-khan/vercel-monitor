@@ -1,0 +1,120 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e33] [cursor=pointer]:
+    - img [ref=e34]
+  - alert [ref=e37]
+  - generic [ref=e520]:
+    - complementary [ref=e521]:
+      - generic [ref=e522]:
+        - generic [ref=e524]: LL
+        - generic [ref=e525]: LimitLens
+      - generic [ref=e527]:
+        - img [ref=e528]
+        - generic [ref=e530]: Vercel Connected
+      - navigation [ref=e531]:
+        - link "Dashboard" [ref=e532] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e533]
+          - generic [ref=e538]: Dashboard
+        - link "Projects" [ref=e539] [cursor=pointer]:
+          - /url: /projects
+          - img [ref=e540]
+          - generic [ref=e545]: Projects
+        - link "Usage History" [ref=e546] [cursor=pointer]:
+          - /url: /history
+          - img [ref=e548]
+          - generic [ref=e550]: Usage History
+        - link "Alerts" [ref=e551] [cursor=pointer]:
+          - /url: /alerts
+          - img [ref=e552]
+          - generic [ref=e555]: Alerts
+        - link "Settings" [ref=e556] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e557]
+          - generic [ref=e560]: Settings
+      - generic [ref=e561]:
+        - link "Vercel Setup" [ref=e562] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e563]
+          - generic [ref=e565]: Vercel Setup
+        - link "Docs" [ref=e566] [cursor=pointer]:
+          - /url: "#"
+          - img [ref=e567]
+          - generic [ref=e571]: Docs
+        - generic [ref=e572]:
+          - generic [ref=e573]: A
+          - generic [ref=e574]:
+            - generic [ref=e575]: Ayesha Siddiqa
+            - generic [ref=e576]: ahmadyarctn556@gmail.com
+          - button "Sign out" [ref=e577]:
+            - img [ref=e578]
+    - main [ref=e581]:
+      - generic [ref=e582]:
+        - generic [ref=e583]:
+          - heading "Usage History" [level=1] [ref=e584]
+          - paragraph [ref=e585]: Historical resource consumption across your billing cycle
+        - generic [ref=e586]:
+          - img [ref=e587]
+          - text: "Billing cycle: Jun 1 – Jun 30, 2026"
+      - generic [ref=e589]:
+        - button "Edge Requests" [ref=e590]: Edge Requests
+        - button "Active CPU Hours" [ref=e592]: Active CPU Hours
+        - button "Fast Data Transfer" [ref=e594]: Fast Data Transfer
+        - button "Function Invocations" [ref=e596]: Function Invocations
+        - button "Build Execution" [ref=e598]: Build Execution
+        - button "Provisioned Memory" [ref=e600]: Provisioned Memory
+        - button "ISR Reads" [ref=e602]: ISR Reads
+        - button "ISR Writes" [ref=e604]: ISR Writes
+      - generic [ref=e606]:
+        - generic [ref=e607]:
+          - generic [ref=e608]:
+            - generic [ref=e609]:
+              - heading "Edge Requests" [level=2] [ref=e610]
+              - generic [ref=e611]:
+                - img [ref=e612]
+                - text: 6% increase
+            - paragraph [ref=e615]:
+              - text: "Usage over the last 7 days · Current:"
+              - generic [ref=e616]: 80%
+          - generic [ref=e617]:
+            - button "7 days" [ref=e618]
+            - button "14 days" [ref=e619]
+            - button "30 days" [ref=e620]
+        - application [ref=e623]:
+          - generic [ref=e634]:
+            - generic [ref=e635]:
+              - generic [ref=e637]: Jun 2
+              - generic [ref=e639]: Jun 3
+              - generic [ref=e641]: Jun 4
+              - generic [ref=e643]: Jun 5
+              - generic [ref=e645]: Jun 6
+              - generic [ref=e647]: Jun 7
+              - generic [ref=e649]: Jun 8
+              - generic [ref=e651]: Jun 9
+            - generic [ref=e652]:
+              - generic [ref=e654]: 0%
+              - generic [ref=e656]: 25%
+              - generic [ref=e658]: 50%
+              - generic [ref=e660]: 75%
+              - generic [ref=e662]: 100%
+        - generic [ref=e663]:
+          - generic [ref=e664]: Usage %
+          - generic [ref=e666]: Warning (75%)
+          - generic [ref=e668]: Danger (85%)
+      - generic [ref=e670]:
+        - generic [ref=e671]:
+          - generic [ref=e672]: 80%
+          - generic [ref=e673]: Peak Usage
+          - generic [ref=e674]: Highest in period
+        - generic [ref=e675]:
+          - generic [ref=e676]: 77%
+          - generic [ref=e677]: Average
+          - generic [ref=e678]: Mean over period
+        - generic [ref=e679]:
+          - generic [ref=e680]: 80%
+          - generic [ref=e681]: Current
+          - generic [ref=e682]: Right now
+        - generic [ref=e683]:
+          - generic [ref=e684]: "21"
+          - generic [ref=e685]: Days to Reset
+          - generic [ref=e686]: Billing cycle end
+  - generic [ref=e687]: 0%

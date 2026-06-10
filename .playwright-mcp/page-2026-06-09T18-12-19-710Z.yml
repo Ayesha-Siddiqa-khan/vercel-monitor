@@ -1,0 +1,140 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e33] [cursor=pointer]:
+    - img [ref=e34]
+  - alert [ref=e37]
+  - generic [ref=e333]:
+    - complementary [ref=e334]:
+      - generic [ref=e335]:
+        - generic [ref=e337]: LL
+        - generic [ref=e338]: LimitLens
+      - generic [ref=e340]:
+        - img [ref=e341]
+        - generic [ref=e343]: Vercel Connected
+      - navigation [ref=e344]:
+        - link "Dashboard" [ref=e345] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e346]
+          - generic [ref=e351]: Dashboard
+        - link "Projects" [ref=e352] [cursor=pointer]:
+          - /url: /projects
+          - img [ref=e354]
+          - generic [ref=e359]: Projects
+        - link "Usage History" [ref=e360] [cursor=pointer]:
+          - /url: /history
+          - img [ref=e361]
+          - generic [ref=e363]: Usage History
+        - link "Alerts" [ref=e364] [cursor=pointer]:
+          - /url: /alerts
+          - img [ref=e365]
+          - generic [ref=e368]: Alerts
+        - link "Settings" [ref=e369] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e370]
+          - generic [ref=e373]: Settings
+      - generic [ref=e374]:
+        - link "Vercel Setup" [ref=e375] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e376]
+          - generic [ref=e378]: Vercel Setup
+        - link "Docs" [ref=e379] [cursor=pointer]:
+          - /url: "#"
+          - img [ref=e380]
+          - generic [ref=e384]: Docs
+        - generic [ref=e385]:
+          - generic [ref=e386]: A
+          - generic [ref=e387]:
+            - generic [ref=e388]: Ayesha Siddiqa
+            - generic [ref=e389]: ahmadyarctn556@gmail.com
+          - button "Sign out" [ref=e390]:
+            - img [ref=e391]
+    - main [ref=e394]:
+      - generic [ref=e395]:
+        - generic [ref=e396]:
+          - heading "Projects" [level=1] [ref=e397]
+          - paragraph [ref=e398]: 3 connected Vercel projects · Monitoring active
+        - button "Refresh" [ref=e400]:
+          - img [ref=e401]
+          - text: Refresh
+      - generic [ref=e406]:
+        - generic [ref=e407]:
+          - generic [ref=e408]: "3"
+          - generic [ref=e409]: Total Projects
+        - generic [ref=e410]:
+          - generic [ref=e411]: "0"
+          - generic [ref=e412]: Ready
+        - generic [ref=e413]:
+          - generic [ref=e414]: "0"
+          - generic [ref=e415]: Building
+        - generic [ref=e416]:
+          - generic [ref=e417]: "0"
+          - generic [ref=e418]: Errors
+      - generic [ref=e420]:
+        - img [ref=e421]
+        - textbox "Search projects..." [ref=e424]
+      - generic [ref=e425]:
+        - generic [ref=e427]:
+          - generic [ref=e428]:
+            - generic [ref=e429]:
+              - heading "limitlens" [level=3] [ref=e430]
+              - generic [ref=e431]: nextjs
+              - generic [ref=e432]: production
+            - generic [ref=e433]:
+              - generic [ref=e434]:
+                - img [ref=e435]
+                - text: Created Jun 9, 2026
+              - generic [ref=e438]:
+                - img [ref=e439]
+                - text: Updated Jun 9, 2026
+              - img [ref=e443]
+              - link "Vercel Dashboard" [ref=e447] [cursor=pointer]:
+                - /url: https://vercel.com/ayeshas-projects-4d26c246/limitlens
+                - img [ref=e448]
+                - text: Vercel Dashboard
+          - generic [ref=e453]:
+            - img [ref=e454]
+            - text: Unknown
+        - generic [ref=e457]:
+          - generic [ref=e458]:
+            - generic [ref=e459]:
+              - heading "mc-qs-ulitmate" [level=3] [ref=e460]
+              - generic [ref=e461]: services
+              - generic [ref=e462]: production
+            - generic [ref=e463]:
+              - generic [ref=e464]:
+                - img [ref=e465]
+                - text: Created Jun 9, 2026
+              - generic [ref=e468]:
+                - img [ref=e469]
+                - text: Updated Jun 9, 2026
+              - img [ref=e473]
+              - link "Vercel Dashboard" [ref=e477] [cursor=pointer]:
+                - /url: https://vercel.com/ayeshas-projects-4d26c246/mc-qs-ulitmate
+                - img [ref=e478]
+                - text: Vercel Dashboard
+          - generic [ref=e483]:
+            - img [ref=e484]
+            - text: Unknown
+        - generic [ref=e487]:
+          - generic [ref=e488]:
+            - generic [ref=e489]:
+              - heading "water-supply-reports" [level=3] [ref=e490]
+              - generic [ref=e491]: flask
+              - generic [ref=e492]: production
+            - generic [ref=e493]:
+              - generic [ref=e494]:
+                - img [ref=e495]
+                - text: Created Jun 2, 2026
+              - generic [ref=e498]:
+                - img [ref=e499]
+                - text: Updated Jun 5, 2026
+              - img [ref=e503]
+              - link "Vercel Dashboard" [ref=e507] [cursor=pointer]:
+                - /url: https://vercel.com/ayeshas-projects-4d26c246/water-supply-reports
+                - img [ref=e508]
+                - text: Vercel Dashboard
+          - generic [ref=e513]:
+            - img [ref=e514]
+            - text: Unknown
+      - generic [ref=e517]:
+        - generic [ref=e518]: Want to track more projects?
+        - generic [ref=e519]: Projects are automatically detected from your connected Vercel account. All projects on your Hobby plan are monitored together against shared limits.

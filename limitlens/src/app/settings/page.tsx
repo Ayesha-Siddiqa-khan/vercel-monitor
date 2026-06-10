@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Check,
   Eye,
@@ -13,6 +13,8 @@ import {
   AlertCircle,
   Key,
   Zap,
+  HelpCircle,
+  X,
 } from "lucide-react";
 import { Sidebar } from "@/components/Sidebar";
 
@@ -25,6 +27,17 @@ export default function SettingsPage() {
   const [showToken, setShowToken] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [error, setError] = useState("");
+  const [showHelpModal, setShowHelpModal] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && showHelpModal) {
+        setShowHelpModal(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [showHelpModal]);
 
   const handleConnect = async () => {
     if (!token.trim()) {
@@ -308,14 +321,15 @@ export default function SettingsPage() {
                   >
                     Create a token in Vercel → Settings → Tokens with
                     &quot;Read&quot; scope.{" "}
-                    <a
-                      href="#"
-                      className="underline hover:opacity-80"
+                    <button
+                      type="button"
+                      onClick={() => setShowHelpModal(true)}
+                      className="underline hover:opacity-80 inline-flex items-center gap-1"
                       style={{ color: "var(--primary)" }}
                     >
                       How to get your token{" "}
-                      <ExternalLink className="w-3 h-3 inline" />
-                    </a>
+                      <ExternalLink className="w-3 h-3" />
+                    </button>
                   </p>
                 </div>
 
@@ -440,6 +454,135 @@ export default function SettingsPage() {
           </div>
         )}
       </main>
+
+      {/* Help Modal */}
+      {showHelpModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}
+          onClick={() => setShowHelpModal(false)}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl overflow-hidden"
+            style={{ background: "var(--card)", border: "1px solid var(--border)" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div
+              className="flex items-center justify-between px-6 py-4"
+              style={{ borderBottom: "1px solid var(--border)" }}
+            >
+              <div className="flex items-center gap-2">
+                <HelpCircle className="w-5 h-5" style={{ color: "var(--primary)" }} />
+                <h2 className="font-semibold" style={{ fontSize: "1rem" }}>
+                  How to get your credentials
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowHelpModal(false)}
+                className="p-1 rounded-lg transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)" }}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="px-6 py-5 space-y-6">
+              {/* Access Token Section */}
+              <div>
+                <h3
+                  className="text-sm font-semibold mb-3 flex items-center gap-2"
+                  style={{ color: "var(--foreground)" }}
+                >
+                  <Key className="w-4 h-4" style={{ color: "var(--primary)" }} />
+                  Vercel Access Token
+                </h3>
+                <div
+                  className="rounded-lg px-4 py-2.5 mb-3 text-xs"
+                  style={{
+                    background: "var(--secondary)",
+                    fontFamily: "var(--font-family-mono)",
+                    color: "var(--muted-foreground)",
+                  }}
+                >
+                  Vercel Dashboard → Account Settings → Tokens → Create Token
+                </div>
+                <ol
+                  className="text-sm space-y-1.5 pl-4 list-decimal"
+                  style={{ color: "var(--muted-foreground)" }}
+                >
+                  <li>Open your Vercel account.</li>
+                  <li>Go to Account Settings.</li>
+                  <li>Open Tokens.</li>
+                  <li>Click <strong style={{ color: "var(--foreground)" }}>Create Token</strong>.</li>
+                  <li>Copy the token and paste it into LimitLens.</li>
+                </ol>
+              </div>
+
+              {/* Divider */}
+              <div style={{ borderTop: "1px solid var(--border)" }} />
+
+              {/* Team ID Section */}
+              <div>
+                <h3
+                  className="text-sm font-semibold mb-3 flex items-center gap-2"
+                  style={{ color: "var(--foreground)" }}
+                >
+                  <Zap className="w-4 h-4" style={{ color: "var(--primary)" }} />
+                  Team ID
+                </h3>
+                <div
+                  className="rounded-lg px-4 py-2.5 mb-3 text-xs"
+                  style={{
+                    background: "var(--secondary)",
+                    border: "1px solid var(--border)",
+                  }}
+                >
+                  <span style={{ color: "var(--muted-foreground)", fontFamily: "var(--font-family-mono)" }}>
+                    For personal Hobby accounts: Leave Team ID empty.
+                  </span>
+                </div>
+                <p className="text-sm mb-2" style={{ color: "var(--muted-foreground)" }}>
+                  For team accounts:
+                </p>
+                <div
+                  className="rounded-lg px-4 py-2.5 mb-3 text-xs"
+                  style={{
+                    background: "var(--secondary)",
+                    fontFamily: "var(--font-family-mono)",
+                    color: "var(--muted-foreground)",
+                  }}
+                >
+                  Vercel Dashboard → Select Team → Team Settings → General → Team ID
+                </div>
+                <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>
+                  Copy the Team ID only if your project belongs to a Vercel Team.
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div
+              className="px-6 py-4 flex justify-end"
+              style={{ borderTop: "1px solid var(--border)" }}
+            >
+              <button
+                type="button"
+                onClick={() => setShowHelpModal(false)}
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-80 active:scale-95"
+                style={{
+                  background: "var(--primary)",
+                  color: "var(--primary-foreground)",
+                }}
+              >
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
